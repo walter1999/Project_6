@@ -21,24 +21,24 @@
 #include "d_except.h"
 #include "matrix.h"
 
-class bridge{
-public:
+class bridge
+{
+  public:
     bridge(ifstream &fin);
     
-    bool isConnected(graph &g)
+    bool isConnected(graph &g);
     // Returns true if the graph g is connected. Otherwise returns false.
-    bool isCyclic(graph &g)
+    bool isCyclic(graph &g);
     // Returns true if the graph g contains a cycle. Otherwise, returns false.
-    void findSpanningForest(graph &g1, graph &sf)
+    void findSpanningForest(graph &g1, graph &sf);
     // Create a graph sf that contains a spanning forest on the graph g.
     void DFS(
-    
+    bool allNodesVisited(Graph g);
+
+    bool dfs(Graph::vertex_descriptor start, Graph &g, Graph::vertex_descriptor previous); 
 private:
-    int rows;
-    int cols;
-    
-    matrix<bool> value;
-    matrix<Graph:: vertex_descriptor> graphM;//  matrix for vertex descriptors}
+   bool isCyclicUtil(int v, bool visited[], bool *rs);  // used by isCyclic()
+   list<int> *adj;// Pointer to an array containing adjacency lists
 
-
+};
 #endif /* Bridge_hpp */
