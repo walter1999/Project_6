@@ -15,7 +15,7 @@
 #include <vector>
 #include <stack>
 #include "d_except.h"
-
+#include "matrix.h"
 #include <boost/graph/adjacency_list.hpp>
 
 
@@ -23,27 +23,33 @@ bridge::bridge(std::ifstream &fin)
 // Initializes a maze by reading values from fin.  Assumes that the
 // number of rows and columns indicated in the file are correct.
 {
-    fin >> rows; // reads rows from file
-    fin >> cols; // reads cols from file
-    
-    char x; // variable to hodl values
-    
-    value.resize(rows,cols); // resize the matrix
-    for (int i = 0; i <= rows-1; i++)//  traverse matrix to store bool values
-        for (int j = 0; j <= cols-1; j++)
-        {
-            fin >> x;
-            if (x == 'O')// checks to see if spot is empty. Not a wall
-                value[i][j] = true;
-            else
-                value[i][j] = false;// make false if X is detected
-        }
-    
+    void initializeGraph(Graph &g, ifstream &fin)
+// Initialize g using data from fin.  Set start and end equal
+// to the start and end nodes.
+{
+   EdgeProperties e;
+
+   int n, i, j;
+   fin >> n;
+   Graph::vertex_descriptor v;
+
+   // Add nodes.
+   for (int i = 0; i < n; i++)
+   {
+      v = add_vertex(g);
+   }
+
+   while (fin.peek() != '.')
+   {
+      fin >> i >> j >> e.weight;
+      add_edge(i,j,e,g);
+   }
 }
 
-void clearVisited(Graph &g){
+
+void clearVisited(graph &g){
     // Mark all nodes in g as not visited.
-    typedef boost:: graph_traits<Graph>::vertex_iterator vertex_iter;
+    typedef boost:: graph_traits<graph>::vertex_iterator vertex_iter;
     std::pair<vertex_iter, vertex_iter> vertexPair;
     for(vertexPair=vertices(g); vertexPair.first != vertexPair.second; ++vertexPair.first)
         g[*vertexPair.first].visited=false;
@@ -52,24 +58,56 @@ void clearVisited(Graph &g){
 
 bool bridge::isConnected(graph &g){
 // Returns true if the graph g is connected. Otherwise returns false.
-    clearVisited(g);
-    
-    depth_first_search(g, visitor(vis).root_vertex(root_vertex_descriptor));
-    
-    allNodesVisited(g);
     
 }
-bool bridge::isCyclic(graph &g){
+bool bridge::isCyclic(Graph &g){
 // Returns true if the graph g contains a cycle. Otherwise, returns false.
-    
+     // Mark all the vertices as not visited and not part of recursion
+    // stack
+    bool *visited = new bool[V];
+    bool *recStack = new bool[V];
+    for(int i = 0; i < V; i++)
+    {
+        visited[i] = false;
+        recStack[i] = false;
+    }
+ 
+    // Call the recursive helper function to detect cycle in different
+    // DFS trees
+    for(int i = 0; i < V; i++)
+        if (isCyclicUtil(i, visited, recStack))
+            return true;
+ 
+    return false;
+}
+bool Graph::isCyclicUtil(int v, bool visited[], bool *recStack)
+{
+    if(visited[v] == false)
+    {
+        // Mark the current node as visited and part of recursion stack
+        visited[v] = true;
+        recStack[v] = true;
+ 
+        // Recur for all the vertices adjacent to this vertex
+        list<int>::iterator i;
+        for(i = adj[v].begin(); i != adj[v].end(); ++i)
+        {
+            if ( !visited[*i] && isCyclicUtil(*i, visited, recStack) )
+                return true;
+            else if (recStack[*i])
+                return true;
+        }
+ 
+    }
+    recStack[v] = false;  // remove the vertex from recursion stack
+    return false;
 }
 void bridge::findSpanningForest(graph &g1, graph &sf){
 // Create a graph sf that contains a spanning forest on the graph g.
     
-    
 }
 
-void bridge::DFS(Graph &g){// passes down the graph by reference and finds a path using DFS
+void bridge::DFSS(Graph &g){// passes down the graph by reference and finds a path using DFS
     Graph:: vertex_descriptor Dr;
     Graph:: vertex_descriptor first;
     first= graphM[0][0];
@@ -97,17 +135,4 @@ void bridge::DFS(Graph &g){// passes down the graph by reference and finds a pat
             
         }
     }
-}
-
-
-void bridge::allNodesVisited(graph &g){
-    int visited=0;
-    
-    for (Graph::vertex_iterator vItr= vItrRange.first; vItr != vItrRange.second; ++vItr){
-        if(vItr.visited) visited++;
-        
-        else return false;
-    
-}
-    if(visited == num_vertices(g)) return true;
 }
