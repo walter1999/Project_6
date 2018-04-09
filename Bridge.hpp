@@ -19,26 +19,25 @@
 #include <stack>
 #include <boost/graph/adjacency_list.hpp>
 #include "d_except.h"
-#include "matrix.h"
 
-class bridge
-{
-  public:
+
+class bridge{
+public:
     bridge(ifstream &fin);
     
-    bool isConnected(graph &g);
+    bool isConnected(Graph &g);
     // Returns true if the graph g is connected. Otherwise returns false.
-    bool isCyclic(graph &g);
+    bool isCyclic(Graph &g)
     // Returns true if the graph g contains a cycle. Otherwise, returns false.
-    void findSpanningForest(graph &g1, graph &sf);
+    void findSpanningForest(Graph &g1, Graph &sf)
     // Create a graph sf that contains a spanning forest on the graph g.
-    void DFS(
-    bool allNodesVisited(Graph g);
-
-    bool dfs(Graph::vertex_descriptor start, Graph &g, Graph::vertex_descriptor previous); 
+    void DFS(vertex::descriptor start, Graph &g)
+    
 private:
-   bool isCyclicUtil(int v, bool visited[], bool *rs);  // used by isCyclic()
-   list<int> *adj;// Pointer to an array containing adjacency lists
+    int rows;
+    int cols;
+    
 
-};
+
+
 #endif /* Bridge_hpp */
