@@ -24,7 +24,7 @@
 class bridge
 {
   public:
-    bridge(ifstream &fin);
+    bridge(ifstream &fin, Graph &g);
     
     bool isConnected(graph &g);
     // Returns true if the graph g is connected. Otherwise returns false.
@@ -32,7 +32,7 @@ class bridge
     // Returns true if the graph g contains a cycle. Otherwise, returns false.
     void findSpanningForest(graph &g1, graph &sf);
     // Create a graph sf that contains a spanning forest on the graph g.
-    void DFS(
+    void DFS();
     bool allNodesVisited(Graph g);
 
     bool dfs(Graph::vertex_descriptor start, Graph &g, Graph::vertex_descriptor previous); 

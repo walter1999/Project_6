@@ -19,11 +19,7 @@
 #include <boost/graph/adjacency_list.hpp>
 
 
-bridge::bridge(std::ifstream &fin)
-// Initializes a maze by reading values from fin.  Assumes that the
-// number of rows and columns indicated in the file are correct.
-{
-    void initializeGraph(Graph &g, ifstream &fin)
+bridge::bridge(std::ifstream &fin, Graph &g)
 // Initialize g using data from fin.  Set start and end equal
 // to the start and end nodes.
 {
@@ -141,11 +137,11 @@ void bridge::DFSS(Graph &g){// passes down the graph by reference and finds a pa
         }
     }
 }
-void bfs(Graph::vertex_descriptor start, Graph &g, Graph &sf){
+void  bridge::findSpanningForest(Graph &g, Graph &sf){
 // Perform a breadth-first search of unvisited nodes in graph g
 // starting at the start node.
 // Add edges to graph sf as they are discovered. 
-
+int s=0;
 bool *visited = new bool[V];
     for(int i = 0; i < V; i++)
         visited[i] = false;
