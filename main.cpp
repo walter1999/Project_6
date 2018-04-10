@@ -60,8 +60,8 @@ int main()
       Graph sf;
       bridge m(fin,g );
       fin.close();
-      bridge.findSpanningForest(g,sf);
-      if(bridge.isCyclic(g))
+      m.findSpanningForest(g,sf);
+      if(m.isCyclic(g))
       std::cout<<" The graph contains cycles "<<std:endl;
       else 
       std::cout<<" The graph does not contain any cycles "<<std:endl;
