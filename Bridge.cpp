@@ -43,7 +43,12 @@ bridge::bridge(std::ifstream &fin)
    {
       fin >> i >> j >> e.weight;
       add_edge(i,j,e,g);
+      addEdge(i,j);
    }
+}
+void addEdge(int v, int w)
+{
+    adj[v].push_back(w); // Add w to v’s list.
 }
 
 
@@ -135,4 +140,50 @@ void bridge::DFSS(Graph &g){// passes down the graph by reference and finds a pa
             
         }
     }
+}
+void bfs(Graph::vertex_descriptor start, Graph &g, Graph &sf){
+// Perform a breadth-first search of unvisited nodes in graph g
+// starting at the start node.
+// Add edges to graph sf as they are discovered. 
+
+bool *visited = new bool[V];
+    for(int i = 0; i < V; i++)
+        visited[i] = false;
+ 
+    // Create a queue for BFS
+    list<int> queue;
+ 
+    // Mark the current node as visited and enqueue it
+    visited[s] = true;
+    queue.push_back(s);
+ 
+    // 'i' will be used to get all adjacent
+    // vertices of a vertex
+    list<int>::iterator i;
+ 
+    while(!queue.empty())
+    {
+        // Dequeue a vertex from queue and print it
+        s = queue.front();
+        cout << s << " ";
+        queue.pop_front();
+ 
+        // Get all adjacent vertices of the dequeued
+        // vertex s. If a adjacent has not been visited, 
+        // then mark it visited and enqueue it
+        for (i = adj[s].begin(); i != adj[s].end(); ++i)
+        {
+            if (!visited[*i])
+            {
+                visited[*i] = true;
+                queue.push_back(*i);
+                boost::add_edge(s,*i, sf);
+            }
+        }
+    }
+
+
+
+
+
 }
