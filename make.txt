@@ -1,0 +1,6 @@
+all: main.o bridge.o
+    g++ main.o bridge.o -o output 
+main.o: main.cpp bridge.cpp
+    g++ -c main.cpp bridge.cpp 
+bridge.o: bridge.hpp  bridge.cpp
+    g++ -c bridge.hpp  bridge.cpp
